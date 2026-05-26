@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Certificates</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    th {
+      background: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Certificates</h1>
+
+  <table>
+    <tr>
+      <th>Serial</th>
+      <th>Issuer</th>
+      <th>Valid From</th>
+      <th>Valid To</th>
+    </tr>
+
+    {% for c in certs %}
+    <tr>
+      <td>{{ c.serial_number }}</td>
+      <td>{{ c.name_attributes.common_name }}</td>
+      <td>{{ c.not_before }}</td>
+      <td>{{ c.not_after }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+</body>
+
+</html>
