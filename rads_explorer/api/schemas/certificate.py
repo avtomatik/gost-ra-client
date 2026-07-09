@@ -53,7 +53,7 @@ class CertificateDetail(CertificateBase):
         None, validation_alias="signatureOidDescription"
     )
 
-    raw_certificate: str | None = Field(
+    raw_certificate: bytes | None = Field(
         None, validation_alias="rawCertificate"
     )
 

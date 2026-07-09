@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Certificates</title>
+  <title>Перечень сертификатов</title>
   <style>
     table {
       border-collapse: collapse;
@@ -23,20 +23,42 @@
 
 <body>
 
-  <h1>Certificates</h1>
+  <h1>Перечень сертификатов</h1>
 
   <table>
     <tr>
-      <th>Serial</th>
-      <th>Issuer</th>
-      <th>Valid From</th>
-      <th>Valid To</th>
+      <th>Имя субъекта: ОГРН</th>
+      <th>Имя субъекта: Организация</th>
+      <th>Имя субъекта: GID Организации</th>
+      <th>Имя субъекта: Фамилия</th>
+      <th>Имя субъекта: Имя и отчество</th>
+      <th>Имя субъекта: Подразделение</th>
+      <th>Имя субъекта: Должность или звание</th>ы
+      <th>Имя субъекта: Общее имя</th>
+      <th>Серийный номер</th>
+      <th>Имя субъекта: СНИЛС</th>
+      <th>Статус сертификата</th>
+      <th>Шаблон сертификата</th>
+      <th>Дата отзыва</th>
+      <th>Действителен с</th>
+      <th>Действителен до</th>
     </tr>
 
-    {% for c in certs %}
+    {% for c in certificate_report_rows %}
     <tr>
+      <td>{{ c.ogrn }}</td>
+      <td>{{ c.organization_name }}</td>
+      <td>{{ c.guid }}</td>
+      <td>{{ c.surname }}</td>
+      <td>{{ c.given_name }}</td>
+      <td>{{ c.organizational_unit_name }}</td>
+      <td>{{ c.title }}</td>
+      <td>{{ c.common_name }}</td>
       <td>{{ c.serial_number }}</td>
-      <td>{{ c.name_attributes.common_name }}</td>
+      <td>{{ c.snils }}</td>
+      <td>{{ c.status }}</td>
+      <td>{{ c.certificate_template }}</td>
+      <td>{{ c.revoked_when }}</td>
       <td>{{ c.not_before }}</td>
       <td>{{ c.not_after }}</td>
     </tr>

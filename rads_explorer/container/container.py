@@ -53,7 +53,6 @@ class Container:
             if not self._settings.cert_thumbprint:
                 raise RuntimeError("cert thumbprint required.")
 
-    @lru_cache
     def certificate_service(self):
         return CertificateService(self._client, self._certificate_cache)
 

@@ -20,8 +20,9 @@ router = APIRouter()
 @router.get("/ui", response_class=HTMLResponse)
 def home(num_items: int = 20):
     container = get_container()
+    report_service = container.report_service()
 
-    rows = container.report_service.build_certificates_inventory()
+    rows = report_service.build_certificates_inventory()
 
     html = """
     <html>
@@ -32,7 +33,7 @@ def home(num_items: int = 20):
     """
 
     for c in rows[:num_items]:
-        html += f"<li>{c.serial_number} - {c.name_attributes.common_name}</li>"
+        html += f"<li>{c.serial_number} - {c.common_name}</li>"
 
     html += """
             </ul>
@@ -46,18 +47,21 @@ def home(num_items: int = 20):
 @router.get("/ui/certificates", response_class=HTMLResponse)
 def certificates(request: Request):
     container = get_container()
+    report_service = container.report_service()
 
-    rows = container.report_service.build_certificates_inventory()
+    rows = report_service.build_certificates_inventory()
 
     template = jinja_env.get_template("certificates.html")
-    html = template.render(request=request, certs=rows)
+    html = template.render(request=request, certificate_report_rows=rows)
     return HTMLResponse(content=html)
 
 
 @router.get("/ui/reports/expiring", response_class=HTMLResponse)
 def expiring(request: Request, days: int = 30):
     container = get_container()
-    report = container.report_service().expiring_certificates_report(days)
+    report_service = container.report_service()
+
+    report = report_service.expiring_certificates_report(days)
 
     template = jinja_env.get_template("report_expiring.html")
     html = template.render(request=request, report=report)
@@ -66,19 +70,11 @@ def expiring(request: Request, days: int = 30):
 
 @router.get("/ui/reports/inventory")
 def inventory_report():
-
     container = get_container()
+    report_service = container.report_service()
 
-    report = container.report_service.certificates_inventory_report()
-
+    report = report_service.certificates_inventory_report()
     output = Path("/tmp/certificates_inventory.xlsx")
 
-    container.xlsx_exporter.export(
-        report,
-        output,
-    )
-
-    return FileResponse(
-        output,
-        filename="certificates_inventory.xlsx",
-    )
+    container.xlsx_exporter.export(report, output)
+    return FileResponse(output, filename="certificates_inventory.xlsx")
