@@ -10,8 +10,14 @@ class CertificateService:
         self.api = api_client
         self.cache = cache
 
-    def list(self):
-        return self.api.certificates.list()
+    def list_page(self):
+        return self.api.certificates.list_page()
+
+    def iter_all(self):
+        yield from self.api.certificates.iter_all()
+
+    def list_all(self):
+        return self.api.certificates.list_all()
 
     def search(self, query: str):
         return self.api.certificates.search(query)
@@ -40,5 +46,5 @@ class CertificateService:
         return self.detail_by_id(summary.id)
 
     def iter_details(self):
-        for summary in self.list().items:
+        for summary in self.iter_all():
             yield self.resolve(summary)

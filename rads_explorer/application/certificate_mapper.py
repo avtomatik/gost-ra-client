@@ -13,7 +13,7 @@ class CertificateDetailMapper:
     def map(
         self, certificate: CertificateDetail
     ) -> CertificateDetailReportRow:
-        cert_x509 = certificate.x509
+        cert_x509 = certificate.x509_certificate
 
         return CertificateDetailReportRow(
             ogrn=self.inspector.subject(cert_x509, NameOID.OGRN),

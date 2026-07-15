@@ -52,6 +52,6 @@ USER ${APP_USER}
 EXPOSE 8000
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:8000/api/ra/health || exit 1
+  CMD curl -f http://localhost:8000/health || exit 1
 
 CMD ["/app/.venv/bin/uvicorn", "rads_explorer.interfaces.main:app", "--host", "0.0.0.0", "--port", "8000"]

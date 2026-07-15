@@ -18,8 +18,8 @@ class ReportService:
         self.certificate_service = certificate_service
         self.mapper = CertificateDetailMapper(inspector=X509Inspector())
 
-    def _get_certificates(self):
-        return self.certificate_service.list().items
+    def _iter_certificates(self):
+        yield from self.certificate_service.iter()
 
     def _get_mapped_certificates(self, certificates):
         return [self.mapper.map(c) for c in certificates]
@@ -37,11 +37,11 @@ class ReportService:
         ]
 
     def expiring_certificates_report(self, days: int):
-        certificates = self._get_certificates()
-
         threshold = datetime.now(timezone.utc) + timedelta(days=days)
 
-        filtered = [c for c in certificates if c.not_after <= threshold]
+        filtered = (
+            c for c in self._iter_certificates() if c.not_after <= threshold
+        )
 
         mapped = [self.mapper.map(c) for c in filtered]
 

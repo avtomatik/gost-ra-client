@@ -1,8 +1,10 @@
 import base64
 from datetime import datetime
 from functools import cached_property
+from string import hexdigits
+from uuid import UUID
 
-from cryptography import x509
+from cryptography.x509 import Certificate, load_der_x509_certificate
 from pydantic import Field, field_validator
 
 from .base import APIModel
@@ -11,7 +13,7 @@ from .name_attributes import NameAttributes
 
 
 class CertificateBase(APIModel):
-    id: str
+    id: UUID
     name_attributes: NameAttributes = Field(validation_alias="nameAttributes")
 
     serial_number: str = Field(validation_alias="serialNumber")
@@ -32,9 +34,9 @@ class CertificateDetail(CertificateBase):
     cert_request_id: str | None = Field(None, validation_alias="certRequestId")
     subject: str | None = None
     issuer: str | None = None
-    user_id: str | None = Field(None, validation_alias="userId")
+    user_id: UUID | None = Field(None, validation_alias="userId")
 
-    version: int | None = None
+    version: int = 3
 
     public_key: str | None = Field(None, validation_alias="publicKey")
     public_key_parameters: str | None = Field(
@@ -85,13 +87,13 @@ class CertificateDetail(CertificateBase):
         if value.startswith("\\x"):
             return bytes.fromhex(value.replace("\\x", ""))
 
-        if all(c in "0123456789abcdefABCDEF" for c in value):
+        if all(c in hexdigits for c in value):
             return bytes.fromhex(value)
 
         return base64.b64decode(value, validate=True)
 
     @cached_property
-    def x509(self) -> x509.Certificate:
+    def x509_certificate(self) -> Certificate:
         if not self.raw_certificate:
             raise ValueError("Certificate is empty.")
-        return x509.load_der_x509_certificate(self.raw_certificate)
+        return load_der_x509_certificate(self.raw_certificate)

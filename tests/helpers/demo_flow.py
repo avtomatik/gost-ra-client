@@ -61,7 +61,7 @@ class DemoFlow:
         logger.info("[B] Certificate detail")
         logger.info("Subject: %s", detail.subject)
         logger.info("Issuer: %s", detail.issuer)
-        logger.info("X509: %s", detail.x509.subject)
+        logger.info("X509: %s", detail.x509_certificate.subject)
 
         # =====================================================================
         # C — Reports

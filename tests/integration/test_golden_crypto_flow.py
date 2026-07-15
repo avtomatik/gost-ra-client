@@ -23,7 +23,7 @@ def test_golden_crypto_flow(client, detail_cache, tmp_path):
     # =========================================================================
     # 1. Fetch real data
     # =========================================================================
-    certificates = certificate_service.list()
+    certificates = certificate_service.list_page()
     assert certificates is not None
     assert len(certificates.items) > 0
 
@@ -31,7 +31,7 @@ def test_golden_crypto_flow(client, detail_cache, tmp_path):
 
     detail = certificate_service.detail_by_serial(first_cert.serial_number)
     assert detail.serial_number == first_cert.serial_number
-    assert detail.x509 is not None
+    assert detail.x509_certificate is not None
 
     # =========================================================================
     # 2. Reports (REAL DATA PATH)
