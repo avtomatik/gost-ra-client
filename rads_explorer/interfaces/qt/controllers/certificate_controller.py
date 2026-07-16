@@ -18,8 +18,7 @@ class CertificateWorker(QThread):
         try:
             result = self.service.search(self.query)
 
-            inspector = X509Inspector()
-            mapper = CertificateDetailMapper(inspector)
+            mapper = CertificateDetailMapper(inspector=X509Inspector())
 
             rows = [mapper.map(c) for c in result.items]
 

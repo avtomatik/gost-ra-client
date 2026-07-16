@@ -1,41 +1,41 @@
 import logging
+from collections.abc import Callable
+from typing import Any
 
-from cryptography.x509 import (AttributeNotFound, Certificate,
+from cryptography.x509 import (AttributeNotFound, Certificate, Extension,
                                ExtensionNotFound, ObjectIdentifier)
 
-from rads_explorer.api.schemas.oids import OID
+from rads_explorer.domain.constants.oids import OID
 
 logger = logging.getLogger(__name__)
 
 
 class X509Inspector:
-    @staticmethod
-    def subject(cert: Certificate, oid: ObjectIdentifier):
-        def load():
+    def subject(self, cert: Certificate, oid: ObjectIdentifier) -> str | None:
+        def load() -> str | None:
             attrs = cert.subject.get_attributes_for_oid(oid)
             return attrs[0].value if attrs else None
 
         try:
-            return X509Inspector._safe(load)
+            return self._safe(load, operation="subject lookup")
         except AttributeNotFound:
             return None
 
-    @staticmethod
-    def extension(cert: Certificate, oid: ObjectIdentifier):
+    def extension(
+        self, cert: Certificate, oid: ObjectIdentifier
+    ) -> Extension[Any] | None:
         try:
             return cert.extensions.get_extension_for_oid(oid)
         except ExtensionNotFound:
             return None
         except Exception:
             logger.exception(
-                "Unable to parse certificate extensions while reading %s",
-                oid.dotted_string,
+                "Unable to parse certificate extension %s", oid.dotted_string
             )
             return None
 
-    @staticmethod
-    def certificate_template_oid(cert: Certificate) -> str | None:
-        ext = X509Inspector.extension(
+    def certificate_template_oid(self, cert: Certificate) -> str | None:
+        ext = self.extension(
             cert,
             ObjectIdentifier(OID.CERTIFICATE_TEMPLATE),
         )
@@ -46,7 +46,9 @@ class X509Inspector:
         return ext.value.template_id.dotted_string
 
     @staticmethod
-    def _safe(fn, *, default=None, operation="inspection"):
+    def _safe(
+        fn: Callable[[], Any], *, default: Any = None, operation: str
+    ) -> Any:
         try:
             return fn()
         except Exception:

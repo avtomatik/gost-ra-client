@@ -2,8 +2,9 @@ from typing import Any
 
 from pydantic import ConfigDict, Field
 
+from rads_explorer.domain.constants.oids import OID
+
 from .base import APIModel
-from .oids import OID
 
 
 class NameAttributes(APIModel):

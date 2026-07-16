@@ -2,9 +2,9 @@ from cryptography.x509 import ObjectIdentifier
 from cryptography.x509.oid import NameOID
 
 from rads_explorer.api.schemas.certificate import CertificateDetail
-from rads_explorer.api.schemas.oids import OID
 from rads_explorer.application.contracts import CertificateInspector
 from rads_explorer.data.reports_models import CertificateDetailReportRow
+from rads_explorer.domain.constants.oids import OID
 
 
 class CertificateDetailMapper:
