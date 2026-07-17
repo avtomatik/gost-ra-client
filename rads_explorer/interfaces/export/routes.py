@@ -30,6 +30,7 @@ def export_expiring(days: int = 30):
     container = get_container()
     report_service = container.report_service()
     report = report_service.expiring_certificates_report(days)
+    EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
     path = EXPORTS_DIR / "expiring.xlsx"
     container.exporter().export(report, path)
     return {"file": str(path)}
