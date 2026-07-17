@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, timezone
 
 from rads_explorer.application.certificate_mapper import \
     CertificateDetailMapper
-from rads_explorer.application.x509_inspector import X509Inspector
+from rads_explorer.certificate_domain.inspectors.x509 import X509Inspector
 
 
 @dataclass

@@ -1,19 +1,18 @@
 from cryptography.x509 import ObjectIdentifier
 from cryptography.x509.oid import NameOID
 
-from rads_explorer.api.schemas.certificate import CertificateDetail
-from rads_explorer.application.contracts import CertificateInspector
+from rads_explorer.certificate_domain.constants.oids import OID
+from rads_explorer.certificate_domain.contracts.inspector import \
+    CertificateInspector
+from rads_explorer.certificate_domain.models.certificate import Certificate
 from rads_explorer.data.reports_models import CertificateDetailReportRow
-from rads_explorer.domain.constants.oids import OID
 
 
 class CertificateDetailMapper:
     def __init__(self, inspector: CertificateInspector) -> None:
         self._inspector = inspector
 
-    def map(
-        self, certificate: CertificateDetail
-    ) -> CertificateDetailReportRow:
+    def map(self, certificate: Certificate) -> CertificateDetailReportRow:
         cert_x509 = certificate.x509_certificate
 
         return CertificateDetailReportRow(

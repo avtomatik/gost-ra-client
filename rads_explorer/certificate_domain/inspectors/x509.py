@@ -5,7 +5,7 @@ from typing import Any
 from cryptography.x509 import (AttributeNotFound, Certificate, Extension,
                                ExtensionNotFound, ObjectIdentifier)
 
-from rads_explorer.domain.constants.oids import OID
+from rads_explorer.certificate_domain.constants.oids import OID
 
 logger = logging.getLogger(__name__)
 

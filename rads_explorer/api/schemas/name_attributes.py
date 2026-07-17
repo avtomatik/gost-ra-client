@@ -2,7 +2,7 @@ from typing import Any
 
 from pydantic import ConfigDict, Field
 
-from rads_explorer.domain.constants.oids import OID
+from rads_explorer.certificate_domain.constants.oids import OID
 
 from .base import APIModel
 
