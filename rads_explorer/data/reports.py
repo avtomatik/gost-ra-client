@@ -31,6 +31,9 @@ class ReportService:
             data=self.build_certificates_inventory(),
         )
 
+    def build_first_page_view(self):
+        return self.certificate_service.list_page()
+
     def build_certificates_inventory(self):
         return [
             self.mapper.map(c) for c in self.certificate_service.iter_details()

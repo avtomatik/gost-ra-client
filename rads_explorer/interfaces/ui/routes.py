@@ -11,7 +11,7 @@ def home(num_items: int = 20):
     container = get_container()
     report_service = container.report_service()
 
-    rows = report_service.build_certificates_inventory()
+    rows = report_service.build_first_page_view()
 
     html = f"""
     <html>
@@ -21,8 +21,8 @@ def home(num_items: int = 20):
             <ul>
     """
 
-    for c in rows[:num_items]:
-        html += f"<li>{c.serial_number}: {c.common_name}</li>"
+    for c in rows.items:
+        html += f"<li>{c.id} ({c.serial_number}): {c.name_attributes.commonName}</li>"
 
     html += """
             </ul>
