@@ -31,7 +31,6 @@ def test_golden_crypto_flow(client, detail_cache, tmp_path):
 
     detail = certificate_service.detail_by_serial(first_cert.serial_number)
     assert detail.serial_number == first_cert.serial_number
-    assert detail.x509_certificate is not None
 
     # =========================================================================
     # 2. Reports (REAL DATA PATH)

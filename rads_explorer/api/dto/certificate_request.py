@@ -3,12 +3,12 @@ from uuid import UUID
 
 from pydantic import Field
 
-from .base import APIModel
+from .base import DTOModel
 from .extension import Extension
 from .name_attributes import NameAttributes
 
 
-class CertificateRequest(APIModel):
+class CertificateRequest(DTOModel):
     id: UUID
     name_attributes: NameAttributes = Field(validation_alias="nameAttributes")
 

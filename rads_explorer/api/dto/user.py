@@ -3,11 +3,11 @@ from uuid import UUID
 
 from pydantic import Field
 
-from .base import APIModel
+from .base import DTOModel
 from .name_attributes import NameAttributes
 
 
-class User(APIModel):
+class User(DTOModel):
     id: UUID
     name_attributes: NameAttributes = Field(validation_alias="nameAttributes")
 

@@ -1,6 +1,6 @@
 from rads_explorer.api.client import RADSClient
-from rads_explorer.api.schemas.certificate import (CertificateDetail,
-                                                   CertificateSummary)
+from rads_explorer.api.dto.certificate import (CertificateDetailDTO,
+                                               CertificateSummaryDTO)
 from rads_explorer.application.cache.certificate_details import \
     CertificateDetailCache
 
@@ -22,7 +22,7 @@ class CertificateService:
     def search(self, query: str):
         return self.api.certificates.search(query)
 
-    def detail_by_id(self, certificate_id: str) -> CertificateDetail:
+    def detail_by_id(self, certificate_id: str) -> CertificateDetailDTO:
         cached = self.cache.get_by_id(certificate_id)
 
         if cached:
@@ -32,7 +32,7 @@ class CertificateService:
         self.cache.put(detail)
         return detail
 
-    def detail_by_serial(self, serial_number: str) -> CertificateDetail:
+    def detail_by_serial(self, serial_number: str) -> CertificateDetailDTO:
         cached = self.cache.get_by_serial(serial_number)
 
         if cached:
@@ -42,7 +42,7 @@ class CertificateService:
         self.cache.put(detail)
         return detail
 
-    def resolve(self, summary: CertificateSummary) -> CertificateDetail:
+    def resolve(self, summary: CertificateSummaryDTO) -> CertificateDetailDTO:
         return self.detail_by_id(summary.id)
 
     def iter_details(self):

@@ -1,13 +1,12 @@
 from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel
+from .base import DomainModel
+from .extension import Extension
+from .name_attributes import NameAttributes
 
-from rads_explorer.api.schemas.extension import Extension
-from rads_explorer.api.schemas.name_attributes import NameAttributes
 
-
-class Certificate(BaseModel):
+class Certificate(DomainModel):
     id: UUID
     name_attributes: NameAttributes
 

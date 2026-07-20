@@ -4,10 +4,10 @@ from pydantic import ConfigDict, Field
 
 from rads_explorer.certificate_domain.constants.oids import OID
 
-from .base import APIModel
+from .base import DTOModel
 
 
-class NameAttributes(APIModel):
+class NameAttributes(DTOModel):
     model_config = ConfigDict(extra="allow")
 
     # =========================================================================
