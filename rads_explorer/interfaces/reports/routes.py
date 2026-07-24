@@ -14,18 +14,6 @@ jinja_env = Environment(
 router = APIRouter(prefix="/reports", tags=["REPORTS"])
 
 
-@router.get("/expiring", response_class=HTMLResponse)
-def expiring(request: Request, days: int = 30):
-    container = get_container()
-    report_service = container.report_service()
-
-    report = report_service.expiring_certificates_report(days)
-
-    template = jinja_env.get_template("report_expiring.html")
-    html = template.render(request=request, report=report)
-    return HTMLResponse(content=html)
-
-
 @router.get("/certificates", response_class=HTMLResponse)
 def certificates(request: Request):
     container = get_container()

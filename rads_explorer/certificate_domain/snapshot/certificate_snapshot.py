@@ -1,31 +1,40 @@
-from cryptography.x509 import Certificate
+from functools import cached_property
+from uuid import UUID
 
-from rads_explorer.certificate_domain.models.base import DomainModel
-
-from .extension_snapshot import ExtensionSnapshot
+from .base import SnapshotModel
+from .extension_snapshot import CertificateExtension
+from .lifecycle_snapshot import LifecycleSnapshot
 from .public_key_snapshot import PublicKeySnapshot
 from .signature_snapshot import SignatureSnapshot
-from .subject_attribute import SubjectAttribute
+from .subject_attribute import CertificateAttribute
 from .validity_snapshot import ValiditySnapshot
 
 
-class CertificateSnapshot(DomainModel):
-    """
-    Canonical parsed representation of an X.509 certificate.
-    Every consumer in the application operates on this model
-    instead of directly inspecting cryptography objects.
-    """
-
-    certificate: Certificate
+class CertificateSnapshot(SnapshotModel):
+    certificate_id: UUID
     serial_number: str
+    status: str
     version: int
-    fingerprint_sha1: str
     fingerprint_sha256: str
     subject: str
     issuer: str
-    subject_attributes: list[SubjectAttribute]
-    issuer_attributes: list[SubjectAttribute]
-    extensions: list[ExtensionSnapshot]
+    subject_attributes: list[CertificateAttribute]
+    issuer_attributes: list[CertificateAttribute]
+    extensions: list[CertificateExtension]
     public_key: PublicKeySnapshot
     signature: SignatureSnapshot
     validity: ValiditySnapshot
+    lifecycle: LifecycleSnapshot
+
+    @cached_property
+    def subject_by_oid(self) -> dict[str, str]:
+        return {
+            attribute.oid: attribute.value
+            for attribute in self.subject_attributes
+        }
+
+    @cached_property
+    def extension_by_oid(self) -> dict[str, str]:
+        return {
+            extension.oid: extension.value for extension in self.extensions
+        }

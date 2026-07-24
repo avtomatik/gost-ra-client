@@ -63,28 +63,16 @@ class DemoFlow:
         logger.info("Issuer: %s", detail.issuer)
 
         # =====================================================================
-        # C — Reports
+        # C — Export
         # =====================================================================
-        logger.info("[C] Reports")
-
-        expiring = self.reports.expiring_certificates_report(365)
-
-        if len(expiring.data) > 0:
-            logger.info("Expiring: %d", len(expiring.data))
-
-            issuer = self.reports.certificates_inventory_report()
-
-            logger.info("Issuers: %s", issuer.data)
-
-        # =====================================================================
-        # D — Export
-        # =====================================================================
-        logger.info("[D] XLSX Export")
+        logger.info("[C] XLSX Export")
 
         path = EXPORTS_DIR / "ra-ds-explorer-demo.xlsx"
 
         EXPORTS_DIR.mkdir(parents=True, exist_ok=True)
-        self.exporter.export(expiring, path)
+        self.exporter.export(
+            self.reports.certificates_inventory_report(), path
+        )
 
         logger.info("Created: %s", path)
         logger.info("DEMO COMPLETE")

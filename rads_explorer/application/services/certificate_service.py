@@ -1,8 +1,9 @@
 from rads_explorer.api.client import RADSClient
-from rads_explorer.api.dto.certificate import (CertificateDetailDTO,
-                                               CertificateSummaryDTO)
+from rads_explorer.api.dto.certificate import CertificateSummaryDTO
 from rads_explorer.application.cache.certificate_details import \
     CertificateDetailCache
+from rads_explorer.application.mappers.certificate import CertificateMapper
+from rads_explorer.certificate_domain.models.certificate import Certificate
 
 
 class CertificateService:
@@ -22,27 +23,23 @@ class CertificateService:
     def search(self, query: str):
         return self.api.certificates.search(query)
 
-    def detail_by_id(self, certificate_id: str) -> CertificateDetailDTO:
+    def detail_by_id(self, certificate_id: str) -> Certificate:
         cached = self.cache.get_by_id(certificate_id)
-
         if cached:
-            return cached
+            return CertificateMapper.to_domain(cached)
+        dto = self.api.certificates.get_by_id(certificate_id)
+        self.cache.put(dto)
+        return CertificateMapper.to_domain(dto)
 
-        detail = self.api.certificates.get_by_id(certificate_id)
-        self.cache.put(detail)
-        return detail
-
-    def detail_by_serial(self, serial_number: str) -> CertificateDetailDTO:
+    def detail_by_serial(self, serial_number: str) -> Certificate:
         cached = self.cache.get_by_serial(serial_number)
-
         if cached:
-            return cached
+            return CertificateMapper.to_domain(cached)
+        dto = self.api.certificates.get_by_serial(serial_number)
+        self.cache.put(dto)
+        return CertificateMapper.to_domain(dto)
 
-        detail = self.api.certificates.get_by_serial(serial_number)
-        self.cache.put(detail)
-        return detail
-
-    def resolve(self, summary: CertificateSummaryDTO) -> CertificateDetailDTO:
+    def resolve(self, summary: CertificateSummaryDTO) -> Certificate:
         return self.detail_by_id(summary.id)
 
     def iter_details(self):

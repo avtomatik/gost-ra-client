@@ -1,7 +1,7 @@
-from rads_explorer.certificate_domain.models.base import DomainModel
+from .base import SnapshotModel
 
 
-class PublicKeySnapshot(DomainModel):
+class PublicKeySnapshot(SnapshotModel):
     algorithm: str
     oid: str | None = None
     key_size: int | None = None

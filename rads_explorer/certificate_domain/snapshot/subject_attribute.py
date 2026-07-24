@@ -1,10 +1,7 @@
-from pydantic import Field
-
-from rads_explorer.certificate_domain.models.base import DomainModel
+from .base import SnapshotModel
 
 
-class SubjectAttribute(DomainModel):
+class CertificateAttribute(SnapshotModel):
     oid: str
-    name: str | None = None
+    name: str | None
     value: str
-    short_name: str | None = Field(default=None, description="CN, O, OU, etc.")

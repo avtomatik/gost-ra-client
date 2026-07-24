@@ -1,13 +1,8 @@
-from pydantic import Field
-
-from rads_explorer.certificate_domain.models.base import DomainModel
+from .base import SnapshotModel
 
 
-class ExtensionSnapshot(DomainModel):
+class CertificateExtension(SnapshotModel):
     oid: str
-    name: str | None = None
+    name: str | None
     critical: bool
     value: str
-    python_type: str | None = Field(
-        default=None, description="cryptography class name"
-    )

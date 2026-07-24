@@ -1,9 +1,12 @@
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 
-from rads_explorer.application.certificate_mapper import \
-    CertificateDetailMapper
-from rads_explorer.certificate_domain.inspectors.x509 import X509Inspector
+from rads_explorer.certificate_domain.projection.report import ReportProjection
+from rads_explorer.certificate_domain.snapshot.factory import \
+    CertificateSnapshotFactory
+from rads_explorer.certificate_domain.snapshot.memory_cache import \
+    MemorySnapshotCache
+from rads_explorer.certificate_domain.snapshot.provider import SnapshotProvider
 
 
 @dataclass
@@ -16,13 +19,15 @@ class Report:
 class ReportService:
     def __init__(self, certificate_service):
         self.certificate_service = certificate_service
-        self.mapper = CertificateDetailMapper(inspector=X509Inspector())
-
-    def _iter_certificates(self):
-        yield from self.certificate_service.iter()
 
     def _get_mapped_certificates(self, certificates):
-        return [self.mapper.map(c) for c in certificates]
+        provider = SnapshotProvider(
+            cache=MemorySnapshotCache(), factory=CertificateSnapshotFactory()
+        )
+        return [
+            ReportProjection.to_detail_row(provider.get_or_create(certificate))
+            for certificate in certificates
+        ]
 
     def certificates_inventory_report(self):
         return Report(
@@ -35,21 +40,6 @@ class ReportService:
         return self.certificate_service.list_page()
 
     def build_certificates_inventory(self):
-        return [
-            self.mapper.map(c) for c in self.certificate_service.iter_details()
-        ]
-
-    def expiring_certificates_report(self, days: int):
-        threshold = datetime.now(timezone.utc) + timedelta(days=days)
-
-        filtered = (
-            c for c in self._iter_certificates() if c.not_after <= threshold
-        )
-
-        mapped = [self.mapper.map(c) for c in filtered]
-
-        return Report(
-            name=f"expiring_{days}_days",
-            generated_at=datetime.now(timezone.utc),
-            data=mapped,
+        return self._get_mapped_certificates(
+            self.certificate_service.iter_details()
         )

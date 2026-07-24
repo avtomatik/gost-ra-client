@@ -1,8 +1,8 @@
 from datetime import datetime
 
-from rads_explorer.certificate_domain.models.base import DomainModel
+from .base import SnapshotModel
 
 
-class ValiditySnapshot(DomainModel):
+class ValiditySnapshot(SnapshotModel):
     not_before: datetime
     not_after: datetime

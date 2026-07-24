@@ -1,6 +1,6 @@
-from rads_explorer.certificate_domain.models.base import DomainModel
+from .base import SnapshotModel
 
 
-class SignatureSnapshot(DomainModel):
+class SignatureSnapshot(SnapshotModel):
     oid: str
     algorithm: str | None = None

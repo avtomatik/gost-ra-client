@@ -1,8 +1,11 @@
 from PySide6.QtCore import QObject, QThread, Signal
 
-from rads_explorer.application.certificate_mapper import \
-    CertificateDetailMapper
-from rads_explorer.certificate_domain.inspectors.x509 import X509Inspector
+from rads_explorer.certificate_domain.projection.report import ReportProjection
+from rads_explorer.certificate_domain.snapshot.factory import \
+    CertificateSnapshotFactory
+from rads_explorer.certificate_domain.snapshot.memory_cache import \
+    MemorySnapshotCache
+from rads_explorer.certificate_domain.snapshot.provider import SnapshotProvider
 
 
 class CertificateWorker(QThread):
@@ -18,9 +21,16 @@ class CertificateWorker(QThread):
         try:
             result = self.service.search(self.query)
 
-            mapper = CertificateDetailMapper(inspector=X509Inspector())
-
-            rows = [mapper.map(c) for c in result.items]
+            provider = SnapshotProvider(
+                cache=MemorySnapshotCache(),
+                factory=CertificateSnapshotFactory(),
+            )
+            rows = [
+                ReportProjection.to_detail_row(
+                    provider.get_or_create(certificate)
+                )
+                for certificate in result.items
+            ]
 
             self.result_ready.emit(rows)
 
