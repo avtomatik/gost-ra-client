@@ -1,7 +1,7 @@
 services:
   rads-explorer:
     image: ra-ds-explorer:latest
-    container_name: ra-ds-explorer
+    container_name: explorer
 
     build:
       context: .

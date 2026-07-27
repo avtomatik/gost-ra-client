@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ra-ds-explorer
+  name: explorer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ra-ds-explorer
+      app: explorer
   template:
     metadata:
       labels:
-        app: ra-ds-explorer
+        app: explorer
     spec:
       containers:
         - name: explorer
