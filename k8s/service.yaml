@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ra-ds-explorer
+  name: explorer
 spec:
   selector:
-    app: ra-ds-explorer
+    app: explorer
   ports:
     - port: 9000
       targetPort: 9000

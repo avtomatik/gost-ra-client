@@ -2,11 +2,6 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 
 from rads_explorer.certificate_domain.projection.report import ReportProjection
-from rads_explorer.certificate_domain.snapshot.factory import \
-    CertificateSnapshotFactory
-from rads_explorer.certificate_domain.snapshot.memory_cache import \
-    MemorySnapshotCache
-from rads_explorer.certificate_domain.snapshot.provider import SnapshotProvider
 
 
 @dataclass
@@ -17,15 +12,15 @@ class Report:
 
 
 class ReportService:
-    def __init__(self, certificate_service):
+    def __init__(self, certificate_service, snapshot_provider):
         self.certificate_service = certificate_service
+        self.snapshot_provider = snapshot_provider
 
     def _get_mapped_certificates(self, certificates):
-        provider = SnapshotProvider(
-            cache=MemorySnapshotCache(), factory=CertificateSnapshotFactory()
-        )
         return [
-            ReportProjection.to_detail_row(provider.get_or_create(certificate))
+            ReportProjection.to_detail_row(
+                self.snapshot_provider.get_or_create(certificate)
+            )
             for certificate in certificates
         ]
 
