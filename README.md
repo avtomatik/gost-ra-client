@@ -287,25 +287,25 @@ Runtime configuration uses environment variables.
 Example:
 
 ```env
-RADS_TRANSPORT=curl
+RADP_TRANSPORT=curl
 
-RADS_API_BASE_URL=http://emulator:8000
+RADP_API_BASE_URL=http://emulator:8000/api/ra
 
-RADS_CURL_PATH=/opt/product/bin/amd64/curl
+RADP_CURL_PATH=/opt/product/bin/amd64/curl
 
-RADS_CERT_THUMBPRINT=<certificate-thumbprint>
+RADP_CERT_THUMBPRINT=<certificate-thumbprint>
 ```
 
 Transport selection:
 
 ```env
-RADS_TRANSPORT=curl
+RADP_TRANSPORT=curl
 ```
 
 or:
 
 ```env
-RADS_TRANSPORT=curl
+RADP_TRANSPORT=curl
 ```
 
 ---
