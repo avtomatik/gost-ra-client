@@ -8,12 +8,12 @@ router = APIRouter(prefix="/adapter", tags=["adapter"])
 
 
 @router.get("/certificates")
-def certificates(runtime: Runtime = Depends(get_runtime)):
+def list_first_page(runtime: Runtime = Depends(get_runtime)):
     return runtime.client.list_first_page().model_dump(by_alias=True)
 
 
 @router.get("/certificates/{certificate_id}")
-def get_certificate_by_id(
+def get_certificate(
     certificate_id: str, runtime: Runtime = Depends(get_runtime)
 ):
     return runtime.client.get_certificate(certificate_id)

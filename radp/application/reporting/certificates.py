@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
 
-from radp.application.reporting.models import ReportArtifact
 from radp.config.paths import EXPORTS_DIR
 from radp.infrastructure.persistence.repositories.snapshot_repository import \
     SnapshotRepository
 
+from .models import ReportArtifact
 from .projection import CertificateProjection
 from .xlsx import XLSXExporter
 

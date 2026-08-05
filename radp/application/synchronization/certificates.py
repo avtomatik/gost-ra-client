@@ -40,7 +40,7 @@ class CertificateSynchronizationService:
             synchronized += 1
 
         logger.info(
-            "Synchronization finished. " "Created=%s skipped=%s",
+            "Synchronization finished. Created=%s skipped=%s",
             synchronized,
             skipped,
         )
