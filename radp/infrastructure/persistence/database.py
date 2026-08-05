@@ -1,9 +1,8 @@
 from collections.abc import Callable
-
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session, sessionmaker
-
 from radp.infrastructure.persistence.models.base import Base
+
 
 SessionFactory = Callable[[], Session]
 
@@ -18,3 +17,7 @@ def create_session_factory(engine: Engine) -> SessionFactory:
 
 def create_schema(engine: Engine) -> None:
     Base.metadata.create_all(engine)
+
+
+def drop_schema(engine: Engine) -> None:
+    Base.metadata.drop_all(engine)

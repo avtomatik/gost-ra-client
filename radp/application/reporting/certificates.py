@@ -1,8 +1,9 @@
 from datetime import datetime, timezone
 
 from radp.config.paths import EXPORTS_DIR
-from radp.infrastructure.persistence.repositories.snapshot_repository import \
-    SnapshotRepository
+from radp.infrastructure.persistence.repositories.snapshot_repository import (
+    SnapshotRepository,
+)
 
 from .models import ReportArtifact
 from .projection import CertificateProjection
@@ -11,10 +12,12 @@ from .xlsx import XLSXExporter
 
 class CertificateReportService:
     def __init__(
-        self, snapshots: SnapshotRepository, exporter: XLSXExporter
+        self,
+        snapshots: SnapshotRepository,
+        exporter: XLSXExporter | None = None,
     ) -> None:
         self.snapshots = snapshots
-        self.exporter = exporter
+        self.exporter = exporter or XLSXExporter()
 
     def export_excel(self) -> ReportArtifact:
         generated_at = datetime.now(timezone.utc)

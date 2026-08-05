@@ -3,8 +3,9 @@ from uuid import UUID
 from sqlalchemy import desc, select
 
 from radp.domain.models.certificate import CertificateSnapshot
-from radp.infrastructure.persistence.models.certificates import \
-    CertificateSnapshotRecord
+from radp.infrastructure.persistence.models.certificates import (
+    CertificateSnapshotRecord,
+)
 
 
 class SnapshotRepository:

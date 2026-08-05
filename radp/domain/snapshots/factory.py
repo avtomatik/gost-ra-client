@@ -9,8 +9,9 @@ from radp.domain.models.name import DistinguishedName
 from radp.domain.models.public_key import PublicKeySnapshot
 from radp.domain.models.x509 import X509Snapshot
 from radp.domain.snapshots.decoder import CertificateDecoder
-from radp.infrastructure.persistence.repositories.oid_repository import \
-    OIDRepository
+from radp.infrastructure.persistence.repositories.oid_repository import (
+    OIDRepository,
+)
 from radp.infrastructure.ra_api.dto.certificate import CertificateDTO
 
 
@@ -18,10 +19,12 @@ class CertificateSnapshotFactory:
     _VERSION_MAPPING = {x509.Version.v1: 1, x509.Version.v3: 3}
 
     def __init__(
-        self, oid_repository: OIDRepository, decoder: CertificateDecoder
+        self,
+        oid_repository: OIDRepository,
+        decoder: CertificateDecoder | None = None,
     ):
         self.oid_repository = oid_repository
-        self.decoder = decoder
+        self.decoder = decoder or CertificateDecoder()
 
     def _build_metadata(self, dto: CertificateDTO) -> CertificateMetadata:
         return CertificateMetadata(
