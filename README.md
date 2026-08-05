@@ -437,7 +437,7 @@ RADP_DB_NAME=data/radp.sqlite
 RADP_DB_HOST=localhost
 RADP_DB_PORT=5432
 RADP_DB_NAME=radp
-RADP_DB_USER=radp
+RADP_DB_USER=postgres
 RADP_DB_PASSWORD=secret
 
 RADP_CURL_PATH=/opt/cprocsp/bin/amd64/curl

@@ -1,5 +1,5 @@
 [project]
-name = "ra-ds-explorer"
+name = "radp"
 version = "0.1.0"
 description = "Offline-first Python client and service framework for GOST-enabled Registration Authority REST APIs."
 readme = "README.md"
@@ -11,6 +11,7 @@ dependencies = [
     "fastapi>=0.136.3",
     "jinja2>=3.1.6",
     "openpyxl>=3.1.5",
+    "psycopg[binary]>=3.3.4",
     "pydantic-settings>=2.14.1",
     "requests>=2.34.2",
     "sqlalchemy>=2.0.51",
