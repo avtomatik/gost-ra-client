@@ -1,8 +1,9 @@
 from collections.abc import Callable
+
 from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session, sessionmaker
-from radp.infrastructure.persistence.models.base import Base
 
+from radp.infrastructure.persistence.models.base import Base
 
 SessionFactory = Callable[[], Session]
 

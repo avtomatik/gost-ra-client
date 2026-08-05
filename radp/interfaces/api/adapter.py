@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends
 
+from radp.bootstrap.runtime import get_runtime
 from radp.runtime import Runtime
-
-from .runtime import get_runtime
 
 router = APIRouter(prefix="/adapter", tags=["adapter"])
 

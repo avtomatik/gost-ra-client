@@ -3,9 +3,8 @@ from uuid import UUID
 from sqlalchemy import desc, select
 
 from radp.domain.models.certificate import CertificateSnapshot
-from radp.infrastructure.persistence.models.certificates import (
-    CertificateSnapshotRecord,
-)
+from radp.infrastructure.persistence.models.certificates import \
+    CertificateSnapshotRecord
 
 
 class SnapshotRepository:
@@ -38,6 +37,19 @@ class SnapshotRepository:
     def list_all(self) -> list[CertificateSnapshot]:
         with self.session_factory() as session:
             records = session.scalars(select(CertificateSnapshotRecord))
+            return [
+                CertificateSnapshot.model_validate_json(record.payload)
+                for record in records
+            ]
+
+    def list_first(self, limit: int = 20) -> list[CertificateSnapshot]:
+        with self.session_factory() as session:
+            records = (
+                session.query(CertificateSnapshotRecord)
+                .order_by(CertificateSnapshotRecord.persisted_at)
+                .limit(limit)
+                .all()
+            )
             return [
                 CertificateSnapshot.model_validate_json(record.payload)
                 for record in records

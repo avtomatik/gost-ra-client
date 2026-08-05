@@ -2,8 +2,8 @@ from datetime import datetime, timezone
 
 from sqlalchemy import select
 
-from radp.infrastructure.persistence.models.oid import OIDRecord
 from radp.domain.oid.models import OIDDefinition
+from radp.infrastructure.persistence.models.oid import OIDRecord
 
 
 class OIDRepository:

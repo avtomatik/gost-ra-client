@@ -1,9 +1,8 @@
 import logging
 
 from radp.domain.snapshots.factory import CertificateSnapshotFactory
-from radp.infrastructure.persistence.repositories.snapshot_repository import (
-    SnapshotRepository,
-)
+from radp.infrastructure.persistence.repositories.snapshot_repository import \
+    SnapshotRepository
 from radp.infrastructure.ra_api.client import RAClient
 
 logger = logging.getLogger(__name__)

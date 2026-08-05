@@ -1,7 +1,8 @@
-from radp.config.paths import OID_REGISTRY_FIXTURE_PATH
-from radp.domain.oid.models import OIDDefinition
 import json
 from pathlib import Path
+
+from radp.config.paths import OID_REGISTRY_FIXTURE_PATH
+from radp.domain.oid.models import OIDDefinition
 
 
 class OIDRegistryLoader:
@@ -15,7 +16,7 @@ class OIDRegistryLoader:
         return [OIDDefinition.model_validate(item) for item in payload]
 
 
-class OIDRegistryBootstrap:
+class OIDRegistryInitializer:
     def __init__(self, repository, loader: OIDRegistryLoader | None = None):
         self.repository = repository
         self.loader = loader or OIDRegistryLoader()

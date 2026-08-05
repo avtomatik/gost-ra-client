@@ -11,7 +11,7 @@ class OIDRecord(Base):
 
     oid: Mapped[str] = mapped_column(String(64), primary_key=True)
     short_name: Mapped[str | None] = mapped_column(String(32), nullable=True)
-    name: Mapped[str] = mapped_column(String(255), nullable=False)
+    name: Mapped[str] = mapped_column(String(255), nullable=True)
     category: Mapped[str | None] = mapped_column(String(64), nullable=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     enabled: Mapped[bool] = mapped_column(

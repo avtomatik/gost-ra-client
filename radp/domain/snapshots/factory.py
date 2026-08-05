@@ -9,9 +9,8 @@ from radp.domain.models.name import DistinguishedName
 from radp.domain.models.public_key import PublicKeySnapshot
 from radp.domain.models.x509 import X509Snapshot
 from radp.domain.snapshots.decoder import CertificateDecoder
-from radp.infrastructure.persistence.repositories.oid_repository import (
-    OIDRepository,
-)
+from radp.infrastructure.persistence.repositories.oid_repository import \
+    OIDRepository
 from radp.infrastructure.ra_api.dto.certificate import CertificateDTO
 
 

@@ -2,10 +2,9 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from radp.bootstrap.runtime import get_runtime
 from radp.config.paths import TEMPLATE_DIR
 from radp.runtime import Runtime
-
-from .runtime import get_runtime
 
 router = APIRouter(prefix="/export", tags=["export"])
 
@@ -18,10 +17,9 @@ jinja_env = Environment(
 
 @router.get("/preview", response_class=HTMLResponse)
 def preview(request: Request, runtime: Runtime = Depends(get_runtime)):
-    page = runtime.client.list_first_page()
-    # TODO: Should Return First Certificates Listed on First Page
+    items = runtime.reporting.project_first()
     template = jinja_env.get_template("certificates.html")
-    html = template.render(request=request, certificate_report_rows=page.items)
+    html = template.render(request=request, certificate_report_rows=items)
     return HTMLResponse(content=html)
 
 

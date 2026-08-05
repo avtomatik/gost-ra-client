@@ -1,6 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from radp.interfaces.api.runtime import get_runtime
+from radp.bootstrap.runtime import get_runtime
 
 
 def start_scheduler() -> None:

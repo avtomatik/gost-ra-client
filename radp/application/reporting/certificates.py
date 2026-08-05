@@ -1,11 +1,10 @@
 from datetime import datetime, timezone
 
 from radp.config.paths import EXPORTS_DIR
-from radp.infrastructure.persistence.repositories.snapshot_repository import (
-    SnapshotRepository,
-)
+from radp.infrastructure.persistence.repositories.snapshot_repository import \
+    SnapshotRepository
 
-from .models import ReportArtifact
+from .models import CertificateInventoryRow, ReportArtifact
 from .projection import CertificateProjection
 from .xlsx import XLSXExporter
 
@@ -33,3 +32,9 @@ class CertificateReportService:
         return ReportArtifact(
             name="certificates_inventory", generated_at=generated_at, path=path
         )
+
+    def project_first(self, limit: int = 20) -> list[CertificateInventoryRow]:
+        snapshots = self.snapshots.list_first(limit)
+        return [
+            CertificateProjection.inventory(snapshot) for snapshot in snapshots
+        ]
