@@ -1,33 +1,24 @@
-import typer
-
 from radp.config.settings import Settings
 
 
-def doctor():
-    typer.echo("Configuration")
+def doctor(_args) -> None:
+    print("Configuration")
     Settings()
-    typer.echo("  ✓ Settings loaded")
-
-    typer.echo("Database")
-    typer.echo("  ✓ PostgreSQL")
-    typer.echo("  ✓ Connected")
-    typer.echo("  ✓ Schema version: 1")
-
-    typer.echo("OID registry")
-    typer.echo("  ✓ 823 definitions")
-
-    typer.echo("Snapshots")
-    typer.echo("  ✓ 1743 certificates")
-
-    typer.echo("Transport")
-    typer.echo("  ✓ CurlTransport")
-
-    typer.echo("RA API")
-    typer.echo("  ✓ Reachable")
-    typer.echo("  ✓ GET /certificates")
-
-    typer.echo("Synchronization")
-    typer.echo("  ✓ Ready")
-
-    typer.echo("Runtime")
-    typer.echo("  ✓ Healthy")
+    print("  ✓ Settings loaded")
+    print("Database")
+    print("  ✓ PostgreSQL")
+    print("  ✓ Connected")
+    print("  ✓ Schema version: 1")
+    print("OID registry")
+    print("  ✓ 823 definitions")
+    print("Snapshots")
+    print("  ✓ 1743 certificates")
+    print("Transport")
+    print("  ✓ CurlTransport")
+    print("RA API")
+    print("  ✓ Reachable")
+    print("  ✓ GET /certificates")
+    print("Synchronization")
+    print("  ✓ Ready")
+    print("Runtime")
+    print("  ✓ Healthy")

@@ -1,13 +1,8 @@
-import typer
-
 from radp.bootstrap.runtime import get_runtime
 
-app = typer.Typer()
 
-
-@app.command()
-def run():
-    typer.echo("Synchronizing certificates...")
+def synchronize(_args) -> None:
+    print("Synchronizing certificates...")
     runtime = get_runtime()
     count = runtime.synchronization.synchronize()
-    typer.echo(f"Appended {count} certificates.")
+    print(f"Appended {count} certificates.")
