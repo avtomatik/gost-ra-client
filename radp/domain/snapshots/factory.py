@@ -1,4 +1,5 @@
 from cryptography import x509
+from cryptography.exceptions import UnsupportedAlgorithm
 from cryptography.hazmat.primitives import hashes, serialization
 
 from radp.domain.models.attribute import DistinguishedNameAttribute
@@ -43,8 +44,23 @@ class CertificateSnapshotFactory:
             raw_name_attributes=dict(dto.name_attributes),
         )
 
-    def _build_x509(self, cert: x509.Certificate, der: bytes) -> X509Snapshot:
-        pub = cert.public_key()
+    def _build_public_key(self, cert: x509.Certificate) -> PublicKeySnapshot:
+        algorithm_oid = cert.public_key_algorithm_oid.dotted_string
+        registry = self.oid_repository.get(algorithm_oid)
+        algorithm_name = registry.name if registry else None
+
+        try:
+            pub = cert.public_key()
+        except UnsupportedAlgorithm:
+            # cryptography does not understand this public-key algorithm.
+            # Keep the information that can be obtained without decoding it.
+            return PublicKeySnapshot(
+                algorithm_oid=algorithm_oid,
+                algorithm_name=algorithm_name,
+                key_size=None,
+                fingerprint_sha256=None,
+                pem=None,
+            )
         pem = pub.public_bytes(
             encoding=serialization.Encoding.PEM,
             format=serialization.PublicFormat.SubjectPublicKeyInfo,
@@ -56,17 +72,16 @@ class CertificateSnapshotFactory:
                 format=serialization.PublicFormat.SubjectPublicKeyInfo,
             )
         )
-        fingerprint_sha256 = fingerprint.finalize().hex()
-        key_size = getattr(pub, "key_size", None)
-        algorithm_oid = cert.public_key_algorithm_oid.dotted_string
-        algorithm_name = cert.public_key_algorithm_oid._name
-        public_key = PublicKeySnapshot(
+        return PublicKeySnapshot(
             algorithm_oid=algorithm_oid,
             algorithm_name=algorithm_name,
-            key_size=key_size,
-            fingerprint_sha256=fingerprint_sha256,
+            key_size=getattr(pub, "key_size", None),
+            fingerprint_sha256=fingerprint.finalize().hex(),
             pem=pem,
         )
+
+    def _build_x509(self, cert: x509.Certificate, der: bytes) -> X509Snapshot:
+        public_key = self._build_public_key(cert)
         return X509Snapshot(
             version=self._version_number(cert.version),
             serial_number=cert.serial_number,
