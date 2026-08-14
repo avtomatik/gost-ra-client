@@ -44,6 +44,29 @@ class CertificateSnapshotFactory:
             raw_name_attributes=dict(dto.name_attributes),
         )
 
+    def _build_x509(self, cert: x509.Certificate, der: bytes) -> X509Snapshot:
+        public_key = self._build_public_key(cert)
+        return X509Snapshot(
+            version=self._version_number(cert.version),
+            serial_number=cert.serial_number,
+            serial_number_hex=hex(cert.serial_number),
+            issuer=self._build_name(cert.issuer),
+            subject=self._build_name(cert.subject),
+            not_valid_before=cert.not_valid_before_utc,
+            not_valid_after=cert.not_valid_after_utc,
+            signature_algorithm_oid=cert.signature_algorithm_oid.dotted_string,
+            signature_algorithm_name=cert.signature_algorithm_oid._name,
+            public_key=public_key,
+            extensions=self._build_extensions(cert),
+            signature_hex=cert.signature.hex(),
+            tbs_certificate_bytes_hex=cert.tbs_certificate_bytes.hex(),
+            der_hex=der.hex(),
+        )
+
+    @classmethod
+    def _version_number(cls, version: x509.Version) -> int:
+        return cls._VERSION_MAPPING[version]
+
     def _build_public_key(self, cert: x509.Certificate) -> PublicKeySnapshot:
         algorithm_oid = cert.public_key_algorithm_oid.dotted_string
         registry = self.oid_repository.get(algorithm_oid)
@@ -80,29 +103,6 @@ class CertificateSnapshotFactory:
             pem=pem,
         )
 
-    def _build_x509(self, cert: x509.Certificate, der: bytes) -> X509Snapshot:
-        public_key = self._build_public_key(cert)
-        return X509Snapshot(
-            version=self._version_number(cert.version),
-            serial_number=cert.serial_number,
-            serial_number_hex=hex(cert.serial_number),
-            issuer=self._build_name(cert.issuer),
-            subject=self._build_name(cert.subject),
-            not_valid_before=cert.not_valid_before_utc,
-            not_valid_after=cert.not_valid_after_utc,
-            signature_algorithm_oid=cert.signature_algorithm_oid.dotted_string,
-            signature_algorithm_name=cert.signature_algorithm_oid._name,
-            public_key=public_key,
-            extensions=self._build_extensions(cert),
-            signature_hex=cert.signature.hex(),
-            tbs_certificate_bytes_hex=cert.tbs_certificate_bytes.hex(),
-            der_hex=der.hex(),
-        )
-
-    @classmethod
-    def _version_number(cls, version: x509.Version) -> int:
-        return cls._VERSION_MAPPING[version]
-
     def _build_name(self, name: x509.Name) -> DistinguishedName:
         attributes = []
         for attribute in name:
@@ -123,7 +123,13 @@ class CertificateSnapshotFactory:
         self, cert: x509.Certificate
     ) -> list[ExtensionSnapshot]:
         result = []
-        for extension in cert.extensions:
+
+        try:
+            extensions = cert.extensions
+        except (ValueError, UnsupportedAlgorithm):
+            return result
+
+        for extension in extensions:
             registry = self.oid_repository.get(extension.oid.dotted_string)
             result.append(
                 ExtensionSnapshot(

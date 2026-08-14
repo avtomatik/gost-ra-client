@@ -39,8 +39,6 @@ class Settings(BaseSettings):
 
     @property
     def database_url(self) -> str:
-        if self.database_driver == "sqlite":
-            return f"sqlite:///{self.sqlite_path}"
         return (
             f"postgresql+psycopg://"
             f"{self.database_user}:"
