@@ -24,7 +24,7 @@ class Runtime:
         #######################################################################
         # Persistence
         #######################################################################
-        self.engine = create_engine_from_url(self.settings.database_url)
+        self.engine = create_engine_from_url(self.settings.database.url)
         self.session_factory = create_session_factory(self.engine)
         self.oid_repository = OIDRepository(self.session_factory)
         self.snapshot_repository = SnapshotRepository(self.session_factory)
@@ -47,8 +47,8 @@ class Runtime:
         )
         self.reporting = CertificateReportService(self.snapshot_repository)
 
-        logger.info("Transport=%s", self.settings.transport)
-        logger.info("Database=%s", self.settings.database_name)
+        logger.info("Transport=%s", self.settings.transport.mode)
+        logger.info("Database=%s", self.settings.database.name)
 
     def initialize(self):
         OIDRegistryInitializer(self.oid_repository).initialize()

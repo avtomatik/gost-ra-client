@@ -5,14 +5,14 @@ from radp.config.settings import Settings
 
 def create(_args) -> None:
     settings = Settings()
-    create_database(settings)
+    create_database(settings.database)
 
 
 def drop(_args) -> None:
     settings = Settings()
-    drop_database(settings)
+    drop_database(settings.database)
 
 
 def reset(_args) -> None:
     settings = Settings()
-    reset_database(settings)
+    reset_database(settings.database)

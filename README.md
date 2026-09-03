@@ -424,24 +424,23 @@ application/
 Пример:
 
 ```env
-RADP_TRANSPORT=http
+RADP_TRANSPORT__MODE=http
+RADP_TRANSPORT__CURL_PATH=/opt/cprocsp/bin/amd64/curl
+RADP_TRANSPORT__CERT_THUMBPRINT=00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff
 
-RADP_API_BASE_URL=http://emulator:8000/api/ra/
-RADP_API_PREFIX=/api/ra
+RADP_REMOTE_RA__BASE_URL=http://emulator:8000/api/ra/
+RADP_REMOTE_RA__ROOT=/api/ra
 
-RADP_DB_DRIVER=sqlite
-RADP_DB_NAME=data/radp.sqlite
+RADP_DATABASE__DRIVER=sqlite
+RADP_DATABASE__NAME=data/radp.sqlite
 
 # PostgreSQL
 
-RADP_DB_HOST=localhost
-RADP_DB_PORT=5432
-RADP_DB_NAME=radp
-RADP_DB_USER=postgres
-RADP_DB_PASSWORD=secret
-
-RADP_CURL_PATH=/opt/cprocsp/bin/amd64/curl
-RADP_CERT_THUMBPRINT=<thumbprint>
+RADP_DATABASE__HOST=localhost
+RADP_DATABASE__PORT=5432
+RADP_DATABASE__NAME=radp
+RADP_DATABASE__USER=postgres
+RADP_DATABASE__PASSWORD=secret
 ```
 
 ---

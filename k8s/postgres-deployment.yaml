@@ -23,17 +23,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: radp-config
-                  key: RADP_DATABASE_NAME
+                  key: RADP_DATABASE__NAME
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
                   name: radp-config
-                  key: RADP_DATABASE_USER
+                  key: RADP_DATABASE__USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: radp-config
-                  key: RADP_DATABASE_PASSWORD
+                  key: RADP_DATABASE__PASSWORD
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data

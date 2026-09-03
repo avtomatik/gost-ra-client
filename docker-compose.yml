@@ -4,14 +4,14 @@ services:
     container_name: radp-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${RADP_DATABASE_NAME}
-      POSTGRES_USER: ${RADP_DATABASE_USER}
-      POSTGRES_PASSWORD: ${RADP_DATABASE_PASSWORD}
+      POSTGRES_DB: ${RADP_DATABASE__NAME}
+      POSTGRES_USER: ${RADP_DATABASE__USER}
+      POSTGRES_PASSWORD: ${RADP_DATABASE__PASSWORD}
     volumes:
       - postgres-data:/var/lib/postgresql/data
     healthcheck:
       test:
-        [ "CMD-SHELL", "pg_isready -U ${RADP_DATABASE_USER} -d ${RADP_DATABASE_NAME}" ]
+        [ "CMD-SHELL", "pg_isready -U ${RADP_DATABASE__USER} -d ${RADP_DATABASE__NAME}" ]
       interval: 10s
       timeout: 5s
       retries: 5

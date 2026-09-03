@@ -4,7 +4,7 @@ import logging
 import re
 from typing import Any, Mapping
 
-from pydantic_settings import BaseSettings
+from radp.config.settings import Settings
 
 from .exceptions import CurlExecutionError
 from .response import HTTPResponse
@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class CurlTransport:
     TIMEOUT_SECONDS = 30
 
-    def __init__(self, settings: BaseSettings) -> None:
+    def __init__(self, settings: Settings) -> None:
         self.settings = settings
 
     async def get(
@@ -27,13 +27,13 @@ class CurlTransport:
         headers: Mapping[str, Any] | None = None,
     ) -> HTTPResponse:
         url = build_url(
-            api_base_url=str(self.settings.api_base_url),
-            api_root=self.settings.api_root,
+            api_base_url=str(self.settings.remote_ra.base_url),
+            api_root=self.settings.remote_ra.root,
             path=path,
             params=params,
         )
         command = [
-            str(self.settings.curl_path),
+            str(self.settings.transport.curl_path),
             "-s",
             "-S",
             "-i",
@@ -42,7 +42,7 @@ class CurlTransport:
             "-X",
             "GET",
             "--cert",
-            self.settings.cert_thumbprint,
+            self.settings.transport.cert_thumbprint.get_secret_value(),
             "-k",
             url,
         ]
@@ -53,7 +53,7 @@ class CurlTransport:
 
         masked = command.copy()
         idx = masked.index("--cert")
-        masked[idx + 1] = "***"
+        masked[idx + 1] = self.settings.transport.cert_thumbprint
         logger.info("CURL COMMAND: %s", " ".join(masked))
         logger.info("Executing curl request %s", url)
 
